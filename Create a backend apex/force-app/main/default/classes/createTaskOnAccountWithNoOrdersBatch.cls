@@ -20,7 +20,7 @@ global class createTaskOnAccountWithNoOrdersBatch implements Database.Batchable<
                     Status = 'Nouvelle',
                     Priority = 'Normal',
                     IsReminderSet = true,
-					ReminderDateTime = System.now().addDays(5) // Ajouter 5 jours à la date actuelle
+					ReminderDateTime = System.now().addDays(5)
                 );
                 tasksToCreate.add(newTask);
             }

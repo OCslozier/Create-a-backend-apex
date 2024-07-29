@@ -19,10 +19,12 @@ public class TestDataFactory {
         for (Integer i = 0; i < numberOfTestRecords; i++) {
             Task tsk = new Task(
                 WhatId = accList[i].Id,
-                    Subject = 'Follow Up Call',
-                    Status = 'Not Started',
+                    Subject = 'Call',
+                    Status = 'Nouvelle',
                     Priority = 'Normal',
-                    TaskSubtype = taskType                  
+                    TaskSubtype = taskType,
+                    IsReminderSet = true,
+					ReminderDateTime = System.now().addDays(5)
             );
             taskList.add(tsk);
         }

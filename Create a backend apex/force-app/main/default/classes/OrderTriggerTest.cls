@@ -1,10 +1,9 @@
 @isTest
 private class OrderTriggerTest {
     
-    // Test unitaire
+    // Test unitaire : Mise à jour de la commande avec article
     @isTest 
     static void testOrderWithOrderItem() {
-        // Génération des données de test
         Integer sizeTest = 1;
         Decimal unitPrice = 100;
         Decimal pricebookUnitPrice = 100;
@@ -12,23 +11,17 @@ private class OrderTriggerTest {
         
         List<Account> accList = TestDataFactory.createAccount(sizeTest, activeStatus);
         
-        // Création des contrats
         List<Contract> conList = TestDataFactory.createContract(accList);
         
-        // Mise à jour des contrats
         TestDataFactory.updateContractsToActivated(conList);
         
-        // Création des produits
         Product2 prod = TestDataFactory.createProduct();
         
-        // Création des entrées de pricebook
         PricebookEntry pbe = TestDataFactory.createPricebookEntry(prod, pricebookUnitPrice);
         
-        // Création des commandes
         Id standardPricebookId = Test.getStandardPricebookId();
         List<Order> ordList = TestDataFactory.createOrder(accList, sizeTest, standardPricebookId);
         
-        // Création des articles de commande
         List<OrderItem> oiList = TestDataFactory.createOrderItems(ordList, pbe, unitPrice);
         
         Test.startTest();
@@ -37,19 +30,17 @@ private class OrderTriggerTest {
         
         Test.stopTest();
         
-        // Récupération des comptes mis à jour
         List<Order> updatedOrders = [SELECT id, AccountId, Status FROM Order];
         
-        // Vérification du chiffre d'affaire
-        System.debug('Début du test unitaire ...');
+        // Vérification du statut de la commande
         for (Order o: updatedOrders) {
             Assert.AreEqual('Activated', o.Status);
         }
     }
-    // Test unitaire
+    
+    // Test unitaire : Mise à jour de la commande sans article associé
     @isTest 
     static void testOrderWithNoOrderItem() {
-        // Génération des données de test
         Integer sizeTest = 1;
         Decimal unitPrice = 100;
         Decimal pricebookUnitPrice = 100;
@@ -57,19 +48,14 @@ private class OrderTriggerTest {
         
         List<Account> accList = TestDataFactory.createAccount(sizeTest, activeStatus);
         
-        // Création des contrats
         List<Contract> conList = TestDataFactory.createContract(accList);
         
-        // Mise à jour des contrats
         TestDataFactory.updateContractsToActivated(conList);
         
-        // Création des produits
         Product2 prod = TestDataFactory.createProduct();
         
-        // Création des entrées de pricebook
         PricebookEntry pbe = TestDataFactory.createPricebookEntry(prod, pricebookUnitPrice);
         
-        // Création des commandes
         Id standardPricebookId = Test.getStandardPricebookId();
         List<Order> ordList = TestDataFactory.createOrder(accList, sizeTest, standardPricebookId);
         
@@ -87,15 +73,15 @@ private class OrderTriggerTest {
             
         Test.stopTest();
         
+        // Vérification de la génératiion d'une erreur
         Assert.areEqual(true, hasError);
         Assert.isTrue(errorMessage.contains('Il faut ajouter un produit à votre commande.'));
         
     }
     
-    // Test unitaire
+    // Test unitaire : Mise à jour d'un lot de commande avec article
     @isTest 
     static void testBulkOrderWithOrderItem() {
-        // Génération des données de test
         Integer sizeTest = 250;
         Decimal unitPrice = 100;
         Decimal pricebookUnitPrice = 100;
@@ -103,23 +89,17 @@ private class OrderTriggerTest {
         
         List<Account> accList = TestDataFactory.createAccount(sizeTest, activeStatus);
         
-        // Création des contrats
         List<Contract> conList = TestDataFactory.createContract(accList);
         
-        // Mise à jour des contrats
         TestDataFactory.updateContractsToActivated(conList);
         
-        // Création des produits
         Product2 prod = TestDataFactory.createProduct();
         
-        // Création des entrées de pricebook
         PricebookEntry pbe = TestDataFactory.createPricebookEntry(prod, pricebookUnitPrice);
         
-        // Création des commandes
         Id standardPricebookId = Test.getStandardPricebookId();
         List<Order> ordList = TestDataFactory.createOrder(accList, sizeTest, standardPricebookId);
         
-        // Création des articles de commande
         List<OrderItem> oiList = TestDataFactory.createOrderItems(ordList, pbe, unitPrice);
         
         Test.startTest();
@@ -128,20 +108,17 @@ private class OrderTriggerTest {
         
         Test.stopTest();
         
-        // Récupération des comptes mis à jour
         List<Order> updatedOrders = [SELECT id, Status FROM Order];
 
-        // Vérification du chiffre d'affaire
-        System.debug('Début du test unitaire ...');
+        // Vérification du statut des commandes
         for (Order o: updatedOrders) {
             Assert.AreEqual('Activated', o.Status);
         }
     }
 
-// Test unitaire
+	// Test unitaire : Mise à jour d'un compte après suppression des commandes associées
     @isTest 
     static void testupdateInactiveAccountAfterDeleteAllOrders() {
-        // Génération des données de test
         Integer sizeTest = 1;
         Decimal unitPrice = 100;
         Decimal pricebookUnitPrice = 100;
@@ -149,19 +126,14 @@ private class OrderTriggerTest {
         
         List<Account> accList = TestDataFactory.createAccount(sizeTest, activeStatus);
         
-        // Création des contrats
         List<Contract> conList = TestDataFactory.createContract(accList);
         
-        // Mise à jour des contrats
         TestDataFactory.updateContractsToActivated(conList);
         
-        // Création des produits
         Product2 prod = TestDataFactory.createProduct();
         
-        // Création des entrées de pricebook
         PricebookEntry pbe = TestDataFactory.createPricebookEntry(prod, pricebookUnitPrice);
         
-        // Création des commandes
         Id standardPricebookId = Test.getStandardPricebookId();
         List<Order> ordList = TestDataFactory.createOrder(accList, sizeTest, standardPricebookId);
              
@@ -171,19 +143,17 @@ private class OrderTriggerTest {
         
         Test.stopTest();
         
-        // Récupération des comptes mis à jour
         List<Account> updatedAccounts = [SELECT id, Active__c FROM Account];
 
-        // Vérification du chiffre d'affaire
-        System.debug('Début du test unitaire ...');
+        // Vérification du statut du compte
         for (Account acc: updatedAccounts) {
             Assert.AreEqual('No', acc.Active__c);
         }
     }
-// Test unitaire
+    
+	// Test unitaire : Mise à jour d'un compte après suppression d'une commande sur deux
     @isTest 
     static void testupdateInactiveAccountAfterDeleteOneOrder() {
-        // Génération des données de test
         Integer sizeTest = 1;
         Decimal unitPrice = 100;
         Decimal pricebookUnitPrice = 100;
@@ -191,41 +161,36 @@ private class OrderTriggerTest {
         
         List<Account> accList = TestDataFactory.createAccount(sizeTest, activeStatus);
         
-        // Création des contrats
         List<Contract> conList = TestDataFactory.createContract(accList);
         
-        // Mise à jour des contrats
         TestDataFactory.updateContractsToActivated(conList);
         
-        // Création des produits
         Product2 prod = TestDataFactory.createProduct();
         
-        // Création des entrées de pricebook
         PricebookEntry pbe = TestDataFactory.createPricebookEntry(prod, pricebookUnitPrice);
         
-        // Création des commandes
         Id standardPricebookId = Test.getStandardPricebookId();
         List<Order> ordList = TestDataFactory.createOrder(accList, sizeTest, standardPricebookId);
              
         Test.startTest();
-
+		
+        // On ne récupère qu'une seule commande par compte
         List<Order> ordListToDelete = [SELECT id FROM Order LIMIT 1];
         TestDataFactory.removeAllOrders(ordListToDelete);
         
         Test.stopTest();
         
-        // Récupération des comptes mis à jour
         List<Account> updatedAccounts = [SELECT id, Active__c FROM Account];
 
-        // Vérification du chiffre d'affaire
-        System.debug('Début du test unitaire ...');
+        // Vérification du statut du compte
         for (Account acc: updatedAccounts) {
             Assert.AreNotEqual('No', acc.Active__c);
         }
     }
- @isTest 
+    
+    // Test unitaire : Mise à jour d'un lot de comptes après suppression de toutes les commandes associées
+ 	@isTest 
     static void testBulkUpdateInactiveAccountAfterDeleteAllOrders() {
-        // Génération des données de test
         Integer sizeTest = 250;
         Decimal unitPrice = 100;
         Decimal pricebookUnitPrice = 100;
@@ -233,19 +198,14 @@ private class OrderTriggerTest {
         
         List<Account> accList = TestDataFactory.createAccount(sizeTest, activeStatus);
         
-        // Création des contrats
         List<Contract> conList = TestDataFactory.createContract(accList);
         
-        // Mise à jour des contrats
         TestDataFactory.updateContractsToActivated(conList);
         
-        // Création des produits
         Product2 prod = TestDataFactory.createProduct();
         
-        // Création des entrées de pricebook
         PricebookEntry pbe = TestDataFactory.createPricebookEntry(prod, pricebookUnitPrice);
         
-        // Création des commandes
         Id standardPricebookId = Test.getStandardPricebookId();
         List<Order> ordList = TestDataFactory.createOrder(accList, sizeTest, standardPricebookId);
              
@@ -255,11 +215,9 @@ private class OrderTriggerTest {
         
         Test.stopTest();
         
-        // Récupération des comptes mis à jour
         List<Account> updatedAccounts = [SELECT id, Active__c FROM Account];
 
-        // Vérification du chiffre d'affaire
-        System.debug('Début du test unitaire ...');
+        // Vérification des statuts des comptes
         for (Account acc: updatedAccounts) {
             Assert.AreEqual('No', acc.Active__c);
         }
