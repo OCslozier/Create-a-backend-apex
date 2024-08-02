@@ -108,12 +108,13 @@ private class createTaskOnAccountWithNoOrdersBatchTest {
             
         Test.startTest();
 
-        createTaskOnAccountWithNoOrdersBatch createTaskObj=new createTaskOnAccountWithNoOrdersBatch();
-        Database.executeBatch(createTaskObj);
+        String sch = '0 0 8 13 2 ?';
+        ScheduleCreateTaskOnAccountWithNoOrder createTaskObj=new ScheduleCreateTaskOnAccountWithNoOrder();
+        System.schedule('JOB', sch, createTaskObj);
         
         Test.stopTest();
         
- 	List<Task> insertedTasks = [SELECT Id, WhatId, TaskSubtype FROM Task WHERE WhatId IN :accList];
+   List<Task> insertedTasks = [SELECT Id, WhatId, TaskSubtype FROM Task WHERE WhatId IN :accList];
   
     Map<Id, Integer> accountCallTaskCount = new Map<Id, Integer>();
     
