@@ -37,9 +37,22 @@ private class createTaskOnAccountWithNoOrdersBatchTest {
     @isTest 
     static void testcreateTaskOnAccountWithOrders() {
         Integer sizeTest = 1;
+        Decimal unitPrice = 100;
+        Decimal pricebookUnitPrice = 100;
         String activeStatus = 'Yes';
         
         List<Account> accList = TestDataFactory.createAccount(sizeTest, activeStatus);
+        
+        List<Contract> conList = TestDataFactory.createContract(accList);
+        
+        TestDataFactory.updateContractsToActivated(conList);
+        
+        Product2 prod = TestDataFactory.createProduct();
+        
+        PricebookEntry pbe = TestDataFactory.createPricebookEntry(prod, pricebookUnitPrice);
+        
+        Id standardPricebookId = Test.getStandardPricebookId();
+        List<Order> ordList = TestDataFactory.createOrder(accList, sizeTest, standardPricebookId);
             
         Test.startTest();
 
@@ -96,19 +109,33 @@ private class createTaskOnAccountWithNoOrdersBatchTest {
     }
 }
     
-    // Test unitaire : exécution du batch sur un compte avec commande et avec 1 Task de type Call associée
+    // Test unitaire : exécution du job qui déclenche le batch sur un compte avec commande et avec 1 Task de type Call associée
     @isTest 
     static void testcreateTaskOnAccountWithOrdersWithCallTask() {
         Integer sizeTest = 1;
+        Decimal unitPrice = 100;
+        Decimal pricebookUnitPrice = 100;
         String activeStatus = 'Yes';
         String taskType = 'Call';
         
-        List<Account> accList = TestDataFactory.createAccount(sizeTest, activeStatus);   
+        List<Account> accList = TestDataFactory.createAccount(sizeTest, activeStatus);
+        
+        List<Contract> conList = TestDataFactory.createContract(accList);
+        
+        TestDataFactory.updateContractsToActivated(conList);
+        
+        Product2 prod = TestDataFactory.createProduct();
+        
+        PricebookEntry pbe = TestDataFactory.createPricebookEntry(prod, pricebookUnitPrice);
+        
+        Id standardPricebookId = Test.getStandardPricebookId();
+        
+        List<Order> ordList = TestDataFactory.createOrder(accList, sizeTest, standardPricebookId);
         List<Task> taskList = TestDataFactory.createTask(accList, sizeTest, taskType);
             
         Test.startTest();
 
-        String sch = '0 0 8 13 2 ?';
+        String sch = '0 0 8 12 2 ?';
         ScheduleCreateTaskOnAccountWithNoOrder createTaskObj=new ScheduleCreateTaskOnAccountWithNoOrder();
         System.schedule('JOB', sch, createTaskObj);
         
@@ -133,7 +160,7 @@ private class createTaskOnAccountWithNoOrdersBatchTest {
     }
 }
     
-    // Test unitaire : exécution du batch sur un compte avec 200 commandes sans commandes associées
+    // Test unitaire : exécution du batch sur un lot de 200 comptes sans commandes associées et sans task associées
     @isTest 
     static void testBulkcreateTaskOnAccountWithNoOrders() {
         Integer sizeTest = 200;
