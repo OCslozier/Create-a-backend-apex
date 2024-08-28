@@ -129,7 +129,6 @@ public class TestDataFactory {
     
     // Supression de tous les order
     public static void removeAllOrders(List<Order> ordList) {
-        // Trouver et supprimer l'ordre à supprimer
         delete ordList;
     }
     

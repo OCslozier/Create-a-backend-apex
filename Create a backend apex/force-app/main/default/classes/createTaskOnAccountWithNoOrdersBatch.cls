@@ -2,7 +2,7 @@ global class createTaskOnAccountWithNoOrdersBatch implements Database.Batchable<
 
     global Database.QueryLocator start(Database.BatchableContext batchContext) {
         return Database.getQueryLocator([
-            SELECT id, Active__c, 
+            SELECT id, 
                 (SELECT id FROM Orders), 
                 (SELECT id, whatid, TaskSubtype FROM Tasks WHERE TaskSubtype = 'Call')
             FROM Account
