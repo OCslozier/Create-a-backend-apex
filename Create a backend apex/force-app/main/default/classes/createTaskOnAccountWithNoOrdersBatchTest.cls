@@ -1,7 +1,7 @@
 @isTest
 private class createTaskOnAccountWithNoOrdersBatchTest {
     
-    // Test unitaire : exécution du batch sur un compte sans commande et sans Task de type Call associée
+    // Test unitaire : exécution du batch sur un compte sans commande et sans Task associée
     @isTest 
     static void testcreateTaskOnAccountWithNoOrders() {
         Integer sizeTest = 1;
@@ -20,7 +20,7 @@ private class createTaskOnAccountWithNoOrdersBatchTest {
     
     Boolean hasCallTask = false;
     for (Task tsk : insertedTasks) {
-        if (tsk.TaskSubtype == 'Call') {
+        if (tsk.TaskSubtype == 'Task') {
             hasCallTask = true;
             Assert.AreEqual('Call', tsk.Subject, 'Le sujet de la tâche doit être "Call".');
             Assert.AreEqual('Nouvelle', tsk.Status, 'Le statut de la tâche doit être "Nouvelle".');
@@ -30,10 +30,10 @@ private class createTaskOnAccountWithNoOrdersBatchTest {
             break;
         }
     }
-    Assert.isTrue(hasCallTask, 'Une tâche de type call devrait être associée au compte.');
+    Assert.isTrue(hasCallTask, 'Une tâche devrait être associée au compte.');
 }
     
-    // Test unitaire : exécution du batch sur un compte avec commande et sans Task de type Call associée
+    // Test unitaire : exécution du batch sur un compte avec commande et sans Task associée
     @isTest 
     static void testcreateTaskOnAccountWithOrders() {
         Integer sizeTest = 1;
@@ -65,20 +65,20 @@ private class createTaskOnAccountWithNoOrdersBatchTest {
     
     Boolean hasCallTask = false;
     for (Task tsk : insertedTasks) {
-        if (tsk.TaskSubtype == 'Call') {
+        if (tsk.TaskSubtype == 'Task') {
             hasCallTask = true;
             break;
         }
     }
-    Assert.isFalse(hasCallTask, 'Une tâche de type call ne doit pas être associée au compte.');
+    Assert.isFalse(hasCallTask, 'Aucune tâche ne doit être associée au compte.');
 }
     
- // Test unitaire : exécution du batch sur un compte sans commande et avec 1 Task de type Call associée
+ // Test unitaire : exécution du batch sur un compte sans commande et avec 1 Task de type Email associée
     @isTest 
     static void testcreateTaskOnAccountWithNoOrdersWithcallTask() {
         Integer sizeTest = 1;
         String activeStatus = 'No';
-        String taskType = 'Call';
+        String taskType = 'Email';
         
         List<Account> accList = TestDataFactory.createAccount(sizeTest, activeStatus);   
         List<Task> taskList = TestDataFactory.createTask(accList, sizeTest, taskType);
@@ -95,7 +95,7 @@ private class createTaskOnAccountWithNoOrdersBatchTest {
     Map<Id, Integer> accountCallTaskCount = new Map<Id, Integer>();
     
     for (Task tsk : insertedTasks) {
-        if (tsk.TaskSubtype == 'Call') {
+        if (tsk.TaskSubtype == 'Task') {
             if (!accountCallTaskCount.containsKey(tsk.WhatId)) {
                 accountCallTaskCount.put(tsk.WhatId, 0);
             }
@@ -109,14 +109,14 @@ private class createTaskOnAccountWithNoOrdersBatchTest {
     }
 }
     
-    // Test unitaire : exécution du job qui déclenche le batch sur un compte avec commande et avec 1 Task de type Call associée
+    // Test unitaire : exécution du job qui déclenche le batch sur un compte avec commande et avec 1 Task associée
     @isTest 
     static void testcreateTaskOnAccountWithOrdersWithCallTask() {
         Integer sizeTest = 1;
         Decimal unitPrice = 100;
         Decimal pricebookUnitPrice = 100;
         String activeStatus = 'Yes';
-        String taskType = 'Call';
+        String taskType = 'Task';
         
         List<Account> accList = TestDataFactory.createAccount(sizeTest, activeStatus);
         
@@ -146,7 +146,7 @@ private class createTaskOnAccountWithNoOrdersBatchTest {
     Map<Id, Integer> accountCallTaskCount = new Map<Id, Integer>();
     
     for (Task tsk : insertedTasks) {
-        if (tsk.TaskSubtype == 'Call') {
+        if (tsk.TaskSubtype == 'Task') {
             if (!accountCallTaskCount.containsKey(tsk.WhatId)) {
                 accountCallTaskCount.put(tsk.WhatId, 0);
             }
@@ -179,7 +179,7 @@ private class createTaskOnAccountWithNoOrdersBatchTest {
     
     Boolean hasCallTask = false;
     for (Task tsk : insertedTasks) {
-        if (tsk.TaskSubtype == 'Call') {
+        if (tsk.TaskSubtype == 'Task') {
             hasCallTask = true;
             Assert.AreEqual('Call', tsk.Subject, 'Le sujet de la tâche doit être "Call".');
             Assert.AreEqual('Nouvelle', tsk.Status, 'Le statut de la tâche doit être "Nouvelle".');
@@ -189,7 +189,7 @@ private class createTaskOnAccountWithNoOrdersBatchTest {
             break;
         }
     }
-    Assert.isTrue(hasCallTask, 'Une tâche de type call devrait être associée aux comptes.');
+    Assert.isTrue(hasCallTask, 'Une tâche devrait être associée aux comptes.');
 }
     
 }

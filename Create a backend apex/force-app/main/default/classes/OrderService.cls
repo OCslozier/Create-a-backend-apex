@@ -49,7 +49,7 @@ public with sharing class OrderService {
             if (orderItemsMap.containsKey(order.Id) && !orderItemsMap.get(order.Id).isEmpty()) {
                 order.Status = 'Activated';
             } else {
-                order.addError('Il faut ajouter un produit à votre commande.');
+                order.addError('Il faut ajouter un produit à votre commande. Alerte générée pour la démonstration, Ce n\'est pas l\'alerte standard');
             }
         }
     }

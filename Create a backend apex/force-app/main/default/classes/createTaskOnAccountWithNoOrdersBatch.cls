@@ -2,9 +2,9 @@ global class createTaskOnAccountWithNoOrdersBatch implements Database.Batchable<
 
     global Database.QueryLocator start(Database.BatchableContext batchContext) {
         return Database.getQueryLocator([
-            SELECT id, 
+            SELECT id, ownerId,
                 (SELECT id FROM Orders), 
-                (SELECT id, whatid, TaskSubtype FROM Tasks WHERE TaskSubtype = 'Call')
+                (SELECT id, whatid, TaskSubtype FROM Tasks WHERE TaskSubtype = 'Task')
             FROM Account
         ]);
     }
@@ -16,7 +16,8 @@ global class createTaskOnAccountWithNoOrdersBatch implements Database.Batchable<
             if (acc.Tasks.isEmpty() && acc.Orders.isEmpty()) {
                 Task newTask = new Task(
                     WhatId = acc.Id,
-                    TaskSubtype = 'Call',
+                    ownerId = acc.OwnerId,
+                    TaskSubtype = 'Task',
                     Subject = 'Call',
                     Status = 'Nouvelle',
                     Priority = 'Normal',
