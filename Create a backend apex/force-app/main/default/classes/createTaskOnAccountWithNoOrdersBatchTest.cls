@@ -191,5 +191,31 @@ private class createTaskOnAccountWithNoOrdersBatchTest {
     }
     Assert.isTrue(hasCallTask, 'Une tâche devrait être associée aux comptes.');
 }
-    
+      @isTest
+    static void testScheduleBatch() {
+        // On simule l'arrêt du job existant sans quoi on ne pourra pas recréer un job avec le même nom
+        // On recherche le job par son nom et on l'arrête
+        if (Test.isRunningTest()) {
+            List<CronTrigger> existingJobs = [SELECT Id FROM CronTrigger WHERE CronJobDetail.Name = 'ScheduleCreateTaskOnAccountWithNoOrder'];
+            for (CronTrigger job : existingJobs) {
+                System.abortJob(job.Id);
+            }
+        }
+
+        Test.startTest();
+
+        ScheduleCreateTaskOnAccountWithNoOrder.scheduleBatch();
+
+        Test.stopTest();
+
+        // On récupère le job crée par son nom
+        CronTrigger ct = [SELECT Id, CronExpression, TimesTriggered, State 
+                          FROM CronTrigger 
+                          WHERE CronJobDetail.Name = 'ScheduleCreateTaskOnAccountWithNoOrder'];
+
+        // Je vérifie que le job est crée avec les bons paramètres
+        System.assertEquals('0 0 2 ? * 2#1 *', ct.CronExpression, 'La cron expression ne correspond pas');
+        System.assertEquals(0, ct.TimesTriggered, 'La tâche ne doit pas encore avoir été déclenchée');
+        System.assertEquals('WAITING', ct.State, 'La tâche devrait être en attente');
+    }
 }
