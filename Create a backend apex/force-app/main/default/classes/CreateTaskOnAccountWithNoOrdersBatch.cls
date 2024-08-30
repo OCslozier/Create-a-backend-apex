@@ -1,4 +1,4 @@
-global class createTaskOnAccountWithNoOrdersBatch implements Database.Batchable<sObject> {
+global class CreateTaskOnAccountWithNoOrdersBatch implements Database.Batchable<sObject> {
 
     global Database.QueryLocator start(Database.BatchableContext batchContext) {
         return Database.getQueryLocator([
