@@ -1,5 +1,5 @@
 @isTest
-private class createTaskOnAccountWithNoOrdersBatchTest {
+private class CreateTaskOnAccountWithNoOrdersBatchTest {
     
     // Test unitaire : exécution du batch sur un compte sans commande et sans Task associée
     @isTest 
